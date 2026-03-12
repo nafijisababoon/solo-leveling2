@@ -390,6 +390,7 @@ function calcAndSaveTDEE() {
   const age = clampNum($('age-input')?.value);
   const sex = $('sex-input')?.value || 'male';
   const activity = $('activity-input')?.value || 'moderate';
+  const goalWeight = clampNum($('goal-weight-input')?.value);
 
   if (height <= 0 || weight <= 0 || age <= 0) return;
 
@@ -400,13 +401,27 @@ function calcAndSaveTDEE() {
 
   const tdee = Math.round(bmr * activityMultiplier(activity));
 
+  let calorieGoal = tdee;
+
+  // Only apply goal logic if user entered a goal weight
+  if (goalWeight > 0) {
+    if (goalWeight < weight) {
+      // cutting
+      calorieGoal = tdee - 400;
+    } else if (goalWeight > weight) {
+      // bulking
+      calorieGoal = tdee + 300;
+    }
+  }
+
   const goals = loadGoals();
-  goals.calorieGoal = tdee;
+  goals.calorieGoal = calorieGoal;
   saveGoals(goals);
 
   $('goal-panel')?.classList.add('hidden');
   updateAllUI();
 }
+
 
 // ===== CUSTOM ENTRY =====
 function addCustomEntry(e) {
