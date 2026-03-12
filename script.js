@@ -383,7 +383,6 @@ function activityMultiplier(level) {
       return 1.55;
   }
 }
-
 function calcAndSaveTDEE() {
   const height = clampNum($('height-input')?.value);
   const weight = clampNum($('weight-input')?.value);
@@ -403,16 +402,15 @@ function calcAndSaveTDEE() {
 
   let calorieGoal = tdee;
 
-  // Only apply goal logic if user entered a goal weight
   if (goalWeight > 0) {
     if (goalWeight < weight) {
-      // cutting
-      calorieGoal = tdee - 400;
+      calorieGoal = tdee - 500; // cutting
     } else if (goalWeight > weight) {
-      // bulking
-      calorieGoal = tdee + 300;
+      calorieGoal = tdee + 300; // bulking
     }
   }
+
+  calorieGoal = Math.max(calorieGoal, 1200);
 
   const goals = loadGoals();
   goals.calorieGoal = calorieGoal;
@@ -421,6 +419,7 @@ function calcAndSaveTDEE() {
   $('goal-panel')?.classList.add('hidden');
   updateAllUI();
 }
+
 
 
 // ===== CUSTOM ENTRY =====
