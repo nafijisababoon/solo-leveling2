@@ -239,18 +239,13 @@ function updateGoalBar(goals, today) {
   const goal = Math.max(0, Math.round(clampNum(goals.calorieGoal)));
   const pct = goal > 0 ? Math.min(100, Math.round((consumed / goal) * 100)) : 0;
 
-  const big = $('goal-big');
-  const small = $('goal-small');
-  const fill = $('goal-bar-fill');
+  const net = $('net-calories');
+  const line = $('goal-line');
 
-  if (big) big.textContent = `${consumed} / ${goal} kcal`;
-  if (small) small.textContent = `${pct}% of daily goal`;
-
-  if (fill) {
-    fill.style.width = '0%';
-    requestAnimationFrame(() => (fill.style.width = `${pct}%`));
-  }
+  if (net) net.textContent = consumed;
+  if (line) line.textContent = `Goal: ${goal} kcal · ${pct}% reached`;
 }
+
 
 function updateAllUI() {
   const goals = loadGoals();
